@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .cvs {
+            border: 3px solid palegoldenrod;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width=800; height=600 id='cvs' class='cvs'></canvas>
+    <script src='./index.js'></script>
+    <script>
+        let arr = [12, 200, 140, 28, 60, 15, 89]
+        let xdata = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+
+        class Xy {
+            constructor(id, Ydata, Xdata) {
+                this.cvs = document.querySelector(id).getContext('2d');
+                this.xdata = Xdata
+                this.ydada = Ydata
+
+                this.init()
+                this.drawXY()
+                this.drawX()
+                this.drawY()
+            }
+            init() {
+                let cvs = this.cvs
+                cvs.translate(50, 550);
+                cvs.beginPath();
+                cvs.moveTo(0, 0)
+                cvs.lineTo(0, -480)
+                cvs.moveTo(0, 0)
+                cvs.lineTo(650, 0)
+                this.x = 650
+                this.y = 480
+            }
+            drawXY() {
+                let y = this.y;
+                let x = this.x
+            }
+            drawX() {
+                this.graid = this.x / this.xdata.length
+                let cvs = this.cvs
+                for (let i = 0; i < this.xdata.length; i++) {
+                    cvs.moveTo(this.graid * (i + 1), 0)
+                    cvs.lineTo(this.graid * (i + 1), -5)
+                    cvs.stroke();
+                    cvs.fillText(this.xdata[i], this.graid * (i + 1), 15);
+                    cvs.textBaseline = 'middle'
+                }
+            }
+            drawY() {
+                this.graidY = this.y / this.ydada.length
+                let cvs = this.cvs
+                let M = Math.max.apply(Math, this.ydada)
+                let graidYs = M / this.ydada.length
+                for (let j = 0; j < this.ydada.length; j++) {
+                    cvs.moveTo(0, -this.graidY * (j + 1))
+                    cvs.lineTo(5, -this.graidY * (j + 1))
+                    cvs.stroke();
+                    cvs.fillText(Math.ceil(graidYs * (j + 1)), -25, -this.graidY * (j + 1));
+                    cvs.textBaseline = 'middle'
+                }
+            }
+
+
+        }
+
+        class sev extends Xy {
+            constructor(...arr) {
+                super(...arr)
+                this.drawline()
+
+            }
+            drawline() {
+                let cvs = this.cvs
+                let M = Math.max.apply(Math, this.ydada)
+                let scale = M / this.y
+                cvs.beginPath()
+                for (let j = 1; j <= this.ydada.length; j++) {
+                    cvs.lineTo(this.graid * j, -this.ydada[j - 1] / scale)
+                }
+                cvs.stroke()
+            }
+        }
+
+        // new Xy('#cvs', arr, xdata)
+        new sev('#cvs', arr, xdata)
+    </script>
+</body>
+
+</html>
